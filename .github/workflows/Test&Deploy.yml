@@ -74,7 +74,7 @@ jobs:
         name: set env variable
         run: |
           echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
-          echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key.pem && chmod 600 private_key
+          echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key.pem && chmod 600 private_key.pem
           scp -i private_key.pem ubuntu@${{ env.Deployment_Servers }}:/home/ubuntu/ /home/ubuntu/weather_app/compose/compose.yaml
       -
         name: ssh into EC2
