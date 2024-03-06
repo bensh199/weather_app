@@ -82,6 +82,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          script_stop: false
           script: |
             git clone https://github.com/bensh199/weather_app.git
             docker compose up -f /home/ubuntu/weather_app/compose.yaml
