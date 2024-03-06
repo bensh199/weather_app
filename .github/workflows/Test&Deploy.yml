@@ -32,7 +32,7 @@ jobs:
           context: "{{defaultContext}}:Python-Project"
           file: ./Dockerfile
           push: true
-          tags: bensh99/weatherapp-elk:1.0.${{ github.run_number }}
+          tags: bensh99/weatherapp-elk:latest
 
   install_aws_cli:
     name: install aws cli
@@ -84,7 +84,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             git clone https://github.com/bensh199/weather_app.git
-            cd ./weather_app/compose
+            docker compose up -f /home/ubuntu/weather_app/compose
             docker compose up
 
 
