@@ -41,6 +41,7 @@ jobs:
           username: ubuntu
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          overwrite: true
           source: /home/runner/work/weather_app/weather_app/compose/*
           target: /home/ubuntu/
 
@@ -91,7 +92,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: false
           script: |
-            docker compose -f /home/ubuntu/compose/compose.yaml up -d
+            docker compose -f /home/ubuntu/github/workspace/compose/compose.yaml up -d
           
           
           
