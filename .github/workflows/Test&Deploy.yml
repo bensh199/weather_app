@@ -70,4 +70,6 @@ jobs:
         run: |
           echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.DEPLOYMENT_SSH_KEY }} ubuntu@${{ env.Deployment_servers }}
-          git pull 
+          git clone https://github.com/bensh199/weather_app.git
+          cd ~/weather_app/compose
+          docker compose up
