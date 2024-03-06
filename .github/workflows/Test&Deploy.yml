@@ -71,12 +71,28 @@ jobs:
 
     steps:
       -
-        name: ssh into EC2
+        name: set env variable
         run: |
           echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
-          echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@51.16.46.0'
-          git clone https://github.com/bensh199/weather_app.git
-          cd ~/weather_app/compose
-          docker compose up
-          '
+      -
+        name: ssh into EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.Deployment_Servers }}
+          username: ubuntu
+          key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script:
+            git clone https://github.com/bensh199/weather_app.git
+            cd ./weather_app/compose
+            docker compose up
+
+
+          
+          # 
+          # echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key && chmod 600 private_key
+          # ssh -o StrictHostKeyChecking=no -i private_key ubuntu@51.16.46.0
+          # git clone https://github.com/bensh199/weather_app.git
+          # cd ~/weather_app/compose
+          # docker compose up
+          
