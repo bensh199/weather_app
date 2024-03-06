@@ -38,6 +38,8 @@ jobs:
     name: install aws cli
     runs-on: ubuntu-latest
 
+    needs: [build_and_push]
+
     steps:
       -
           name: install-aws-cli-action
@@ -51,6 +53,8 @@ jobs:
     name: install aws cli
     runs-on: ubuntu-latest
 
+    needs: [install_aws_cli]
+
     steps:
       -
         name: install-aws-cli-action
@@ -63,13 +67,15 @@ jobs:
     name: deploy weatherapp on instances
     runs-on: ubuntu-latest
 
+    needs: [login_to_aws_cli]
+
     steps:
       -
         name: ssh into EC2
         run: |
           echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
           echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@${{ env.Deployment_servers }} '
+          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@51.16.46.0'
           git clone https://github.com/bensh199/weather_app.git
           cd ~/weather_app/compose
           docker compose up
