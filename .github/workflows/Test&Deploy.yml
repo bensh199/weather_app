@@ -78,7 +78,7 @@ jobs:
         name: ssh into EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.Deployment_Servers }}
+          host: 51.16.46.0 #${{ secrets.Deployment_Servers }}
           username: ubuntu
           key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
