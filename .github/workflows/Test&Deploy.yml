@@ -33,6 +33,16 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: bensh99/weatherapp-elk:latest
+      -
+        name: scp compose
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 51.16.46.0
+          username: ubuntu
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          source: /home/runner/work/weather_app/weather_app/compose/*
+          target: /home/ubuntu/
 
   install_aws_cli:
     name: install aws cli
@@ -70,16 +80,6 @@ jobs:
     needs: [login_to_aws_cli]
 
     steps:
-      -
-        name: scp compose
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: 51.16.46.0
-          username: ubuntu
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-          source: /home/runner/work/weather_app/weather_app/compose/*
-          target: /home/ubuntu/
 
       -
         name: ssh into EC2
