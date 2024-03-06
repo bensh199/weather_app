@@ -70,20 +70,17 @@ jobs:
     needs: [login_to_aws_cli]
 
     steps:
-      # -
-      #   name: scp compose
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: 51.16.46.0
-      #     username: ubuntu
-      #     port: ${{ secrets.SSH_PORT }}
-      #     key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-      #     source: "/home/runner/work/weather_app/weather_app/compose"
-      #     target: /home/ubuntu/
-      #     # script: |
-      #     #   echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
-      #     #   echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key.pem && chmod 600 private_key.pem
-      #     #   scp -i private_key.pem ubuntu@51.16.46.0:/home/ubuntu/ /home/ubuntu/weather_app/compose/compose.yaml
+      -
+        name: scp compose
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 51.16.46.0
+          username: ubuntu
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+          source: "/home/runner/work/weather_app/weather_app/compose/compose.yaml"
+          target: /home/ubuntu/
+
       -
         name: ssh into EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -94,11 +91,11 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: false
           script: |
-            repo_url="https://github.com/bensh199/weather_app.git" local_path="./weather_app" && [ -d "$local_path" ] || git clone "$repo_url" "$local_path"
-            docker compose -f /home/ubuntu/weather_app/compose/compose.yaml up -d
-
-
+            docker compose -f /home/ubuntu/compose.yaml up -d
           
+          
+          
+          # repo_url="https://github.com/bensh199/weather_app.git" local_path="./weather_app" && [ -d "$local_path" ] || git clone "$repo_url" "$local_path"
           # 
           # echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key && chmod 600 private_key
           # ssh -o StrictHostKeyChecking=no -i private_key ubuntu@51.16.46.0
