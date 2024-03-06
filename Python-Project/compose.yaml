@@ -1,0 +1,8 @@
+version: '3'
+services:
+    flaskapp:
+        image: weatherapp:latest
+        ports:
+        - 8000:8000
+        volumes:
+            - /Users/ben/Documents/weather_app/Python-Project/WeatherLogs.log:/home/ubuntu/app/WeatherLogs.log
