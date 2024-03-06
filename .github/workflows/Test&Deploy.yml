@@ -74,6 +74,8 @@ jobs:
         name: set env variable
         run: |
           echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
+          echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key.pem && chmod 600 private_key
+          scp -i private_key.pem ubuntu@${{ env.Deployment_Servers }}:/home/ubuntu/ /home/ubuntu/weather_app/compose/compose.yaml
       -
         name: ssh into EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -84,6 +86,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: false
           script: |
+            pwd
+            ls -la
             git clone https://github.com/bensh199/weather_app.git
             docker compose up -f /home/ubuntu/weather_app/compose.yaml
             docker compose up
