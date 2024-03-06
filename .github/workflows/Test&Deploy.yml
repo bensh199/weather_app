@@ -84,7 +84,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             git clone https://github.com/bensh199/weather_app.git
-            docker compose up -f /home/ubuntu/weather_app/compose
+            docker compose up -f /home/ubuntu/weather_app/compose.yaml
             docker compose up
 
 
