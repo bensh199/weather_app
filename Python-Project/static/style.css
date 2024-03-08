@@ -28,3 +28,22 @@ div.card.current-weather {
     border: solid rgb(47, 67, 75);
     border-width: thick;
 }
+
+.btn:hover {
+    background-color: rgba(94, 177, 209, 0.482);
+    border-color: rgb(103, 131, 179);
+  }
+
+.btn:active,
+.btn:focus {
+    background-color: rgb(129 200 228) !important;
+    border-color: rgb(255, 255, 255) !important;
+    color: gray !important;
+    outline: none !important;
+  }
+
+.btn {
+    background-color: rgb(129 200 228);
+    border-color: rgb(255, 255, 255);
+    color: gray;
+  }
