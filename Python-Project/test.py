@@ -3,7 +3,7 @@ import requests
 
 class TestWebsiteReachability(unittest.TestCase):
     def test_website_reachable(self):
-        url = 'http://172.17.0.1:80/'
+        url = 'http://172.17.0.1:8000/'
 
         try:
             response = requests.get(url)

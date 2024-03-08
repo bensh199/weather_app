@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(75deg, white, rgb(135, 206, 235));
+    min-height: 100vh;
+}
+
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+nav {
+    background: rgba(37, 132, 175, 0.1);
+    background-blend-mode: color;
+}
+
+div.card-body{
+    background:rgb(135, 206, 235);
+    border: solid rgb(47, 67, 75);
+    border-width: thick;
+}
+
+.container {
+    justify-content: space-around;
+}
