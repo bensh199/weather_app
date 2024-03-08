@@ -19,6 +19,12 @@ div.card-body{
     border-width: thick;
 }
 
-.container {
-    justify-content: space-around;
+div.container.current-weather {
+    padding-bottom: 10px;
+}
+
+div.card.current-weather {
+    background:rgb(135, 206, 235);
+    border: solid rgb(47, 67, 75);
+    border-width: thick;
 }

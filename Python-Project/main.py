@@ -9,7 +9,6 @@ import socket
 from botocore.exceptions import ClientError
 import logging
 
-
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.INFO, filename="WeatherLogs.log",filemode="a", format="[%(asctime)s][%(levelname)s][%(message)s]")
