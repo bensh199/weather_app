@@ -34,8 +34,14 @@ jobs:
           name: weatherapp-elk.tar
           path: /home/runner/work/weather_app/weather_app/Python-Project/weatherapp-elk.tar
 
+      - name: save comopose to cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose.yaml
+          path: /home/runner/work/weather_app/weather_app/Python-Project/compose/compose.yaml
+
       - name: test image
-        working-directory: ./weather_app/Python-Project
+        working-directory: /home/runner/work/weather_app/weather_app/Python-Project
         run: |
           docker run -p 8000:8000 --rm --name weather_app -d bensh99/weatherapp-elk:latest
           python3 test.py
