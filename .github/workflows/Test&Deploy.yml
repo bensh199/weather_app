@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: compose.yaml
-          path: /home/runner/work/weather_app/weather_app/Python-Project/compose/compose.yaml
+          path: /home/runner/work/weather_app/weather_app/Python-Project/compose/*
 
       - name: push image
         run: docker push bensh99/weatherapp-elk:latest
