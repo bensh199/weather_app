@@ -1,49 +1,87 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(75deg, white, rgb(135, 206, 235));
-    min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(75deg, white, rgb(135, 206, 235));
+  min-height: 100vh;
 }
 
 h2 {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 nav {
-    background: rgba(37, 132, 175, 0.1);
-    background-blend-mode: color;
+  background: rgba(37, 132, 175, 0.1);
+  background-blend-mode: color;
 }
 
-div.card-body{
-    background:rgb(135, 206, 235);
-    border: solid rgb(47, 67, 75);
-    border-width: thick;
+.card-container {
+  background: transparent;
+}
+
+div.card-body {
+  background: rgb(135, 206, 235);
+  border: solid rgb(47, 67, 75);
+  border-width: thin;
+  border-radius: 15%;
+  margin: 3px;
+}
+
+.card-text {
+  font-family: Arial, Helvetica, sans-serif;
+  color: hsla(0, 0%, 0%, 0.8);
+  font-weight: bolder;
 }
 
 div.container.current-weather {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 div.card.current-weather {
-    background:rgb(135, 206, 235);
-    border: solid rgb(47, 67, 75);
-    border-width: thick;
+  background: rgb(135, 206, 235);
+  border: solid rgb(47, 67, 75);
+  border-width: thick;
+  background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255, 1) 90%);
+}
+
+.search-bar {
+  background: none;
+  border-color: hsla(0, 0%, 50%, 0.826);
 }
 
 .btn:hover {
-    background-color: rgba(94, 177, 209, 0.482);
-    border-color: rgb(103, 131, 179);
-  }
+  background-color: rgba(94, 177, 209, 0.482);
+  border-color: rgb(103, 131, 179);
+}
 
 .btn:active,
 .btn:focus {
-    background-color: rgb(129 200 228) !important;
-    border-color: rgb(255, 255, 255) !important;
-    color: gray !important;
-    outline: none !important;
-  }
+  background-color: rgb(129 200 228) !important;
+  border-color: rgb(255, 255, 255) !important;
+  color: gray !important;
+  outline: none !important;
+}
 
 .btn {
-    background-color: rgb(129 200 228);
-    border-color: rgb(255, 255, 255);
-    color: gray;
-  }
+  background-color: rgb(129 200 228);
+  border-color: hsla(0, 0%, 50%, 0.826);
+  color: gray;
+}
+
+.date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.card.current-weather {
+  width: 25rem;
+  border-radius: 15%;
+}
+
+.welcome-banner {
+  box-shadow: turquoise;
+}
