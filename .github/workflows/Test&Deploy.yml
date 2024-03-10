@@ -21,7 +21,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: build image
-        working-directory: /Python-Project
+        working-directory: /home/runner/work/weather_app/weather_app/Python-Project
         run: |
           docker build -t bensh99/weatherapp-elk:latest .
           docker save -o bensh99/weatherapp-elk:latest.tar bensh99/weatherapp-elk:latest
