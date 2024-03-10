@@ -2,50 +2,41 @@ name: weather-app-deployment
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build_and_push:
-
     runs-on: ubuntu-latest
 
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      -
-        name: Login to Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      -
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      -
-        name: build image
-        working-directory: ./weather_app/Python-Project
+      - name: build image
+        working-directory: /Python-Project
         run: |
           docker build -t bensh99/weatherapp-elk:latest .
           docker save -o bensh99/weatherapp-elk:latest.tar bensh99/weatherapp-elk:latest
-      -
-        name: save image to cache
+      - name: save image to cache
         uses: actions/upload-artifact@v4
         with:
           name: bensh99/weatherapp-elk:latest
           path: ./bensh99/weatherapp-elk:latest.tar
-      -
-        name: test image
+      - name: test image
         working-directory: ./weather_app/Python-Project
         run: |
           docker run -p 8000:8000 --rm --name weather_app -d bensh99/weatherapp-elk:latest
           python3 test.py
           docker kill weather_app
-      -
-        name: scp compose
+      - name: scp compose
         uses: appleboy/scp-action@v0.1.7
         with:
           host: 51.16.46.0
@@ -62,18 +53,16 @@ jobs:
     needs: [build_and_push]
 
     steps:
-      -
-          name: install-and-configure-aws-cli
-          uses: unfor19/install-aws-cli-action@v1
-          with:
-            version: 2
-            verbose: false
-            arch: amd64
-      -
-          run: |
-            aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws configure set default.region ${{ secrets.AWS_REGION }}
+      - name: install-and-configure-aws-cli
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+      - run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
 
   deploy:
     name: deploy weatherapp on instances
@@ -82,9 +71,7 @@ jobs:
     needs: [install_aws_cli]
 
     steps:
-
-      -
-        name: ssh into EC2
+      - name: ssh into EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 51.16.46.0 #${{ secrets.Deployment_Servers }}
@@ -94,14 +81,11 @@ jobs:
           script_stop: false
           script: |
             docker compose -f /home/ubuntu/github/workspace/compose/compose.yaml up -d
-          
-          
-          
+
           # repo_url="https://github.com/bensh199/weather_app.git" local_path="./weather_app" && [ -d "$local_path" ] || git clone "$repo_url" "$local_path"
-          # 
+          #
           # echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key && chmod 600 private_key
           # ssh -o StrictHostKeyChecking=no -i private_key ubuntu@51.16.46.0
           # git clone https://github.com/bensh199/weather_app.git
           # cd ~/weather_app/compose
           # docker compose up
-          
