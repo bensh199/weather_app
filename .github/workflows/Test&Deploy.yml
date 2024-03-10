@@ -26,13 +26,13 @@ jobs:
         working-directory: /home/runner/work/weather_app/weather_app/Python-Project
         run: |
           docker build -t bensh99/weatherapp-elk:latest .
-          docker save -o weatherapp-elk:latest.tar bensh99/weatherapp-elk:latest
+          docker save -o weatherapp-elk.tar bensh99/weatherapp-elk:latest
 
       - name: save image to cache
         uses: actions/upload-artifact@v4
         with:
           name: weatherapp-elk.tar
-          path: /home/runner/work/weather_app/weather_app/Python-Project/weatherapp-elk:latest.tar
+          path: /home/runner/work/weather_app/weather_app/Python-Project/weatherapp-elk.tar
 
       - name: test image
         working-directory: ./weather_app/Python-Project
