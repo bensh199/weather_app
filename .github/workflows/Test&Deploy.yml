@@ -18,24 +18,29 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: build image
         working-directory: /home/runner/work/weather_app/weather_app/Python-Project
         run: |
           docker build -t bensh99/weatherapp-elk:latest .
-          docker save -o bensh99/weatherapp-elk:latest.tar bensh99/weatherapp-elk:latest
+          docker save -o weatherapp-elk:latest.tar bensh99/weatherapp-elk:latest
+
       - name: save image to cache
         uses: actions/upload-artifact@v4
         with:
-          name: bensh99/weatherapp-elk:latest
-          path: ./bensh99/weatherapp-elk:latest.tar
+          name: weatherapp-elk:latest.tar
+          path: /home/runner/work/weather_app/weather_app/Python-Project/weatherapp-elk:latest.tar
+
       - name: test image
         working-directory: ./weather_app/Python-Project
         run: |
           docker run -p 8000:8000 --rm --name weather_app -d bensh99/weatherapp-elk:latest
           python3 test.py
           docker kill weather_app
+
       - name: scp compose
         uses: appleboy/scp-action@v0.1.7
         with:
