@@ -31,7 +31,7 @@ jobs:
       - name: save image to cache
         uses: actions/upload-artifact@v4
         with:
-          name: weatherapp-elk:latest.tar
+          name: weatherapp-elk.tar
           path: /home/runner/work/weather_app/weather_app/Python-Project/weatherapp-elk:latest.tar
 
       - name: test image
