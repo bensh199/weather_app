@@ -35,11 +35,11 @@ jobs:
           python3 test.py
           docker kill weather_app
 
-      - name: save comopose to cache
-        uses: actions/upload-artifact@v4
-        with:
-          name: compose.yaml
-          path: /home/runner/work/weather_app/weather_app/Python-Project/compose/*
+      # - name: save comopose to cache
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: compose.yaml
+      #     path: /home/runner/work/weather_app/weather_app/Python-Project/compose/*
 
       - name: save ansible to cache
         uses: actions/upload-artifact@v4
