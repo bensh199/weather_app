@@ -99,7 +99,7 @@ jobs:
       - name: download ansible file
         uses: actions/download-artifact@v4
         with:
-          name: ansible
+          name: ansible.zip
 
       - name: run ansible deployment
         uses: dawidd6/action-ansible-playbook@v2
