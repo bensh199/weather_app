@@ -54,7 +54,7 @@
         state: present
 
     - name: start the app
-      docker_service:
+      docker_container:
         pull: yes
         recreate: yes
         name: weather-app
