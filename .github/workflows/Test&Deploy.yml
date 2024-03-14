@@ -128,6 +128,7 @@ jobs:
 
       - name: Deploy via ansible
         run: |
+          export ANSIBLE_HOST_KEY_CHECKING=False
           echo "ansible1 ansible_host=51.16.41.220 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa" > hosts_github
           ansible-playbook ansible-deployment.yaml -i hosts_github
 
