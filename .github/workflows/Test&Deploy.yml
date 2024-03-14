@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ansible-deployment
-          path: /home/runner/work/weather_app/weather_app/Ansible/
+          path: /home/runner/work/weather_app/weather_app/Ansible/*
 
       - name: push image
         run: docker push bensh99/weatherapp:latest
@@ -127,7 +127,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
       - name: Deploy via ansible
-        working-directory: ./Ansible
         run: |
           echo "ansible1 ansible_host=51.16.41.220 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa" > hosts_github
           ansible-playbook web_deploy.yml -i hosts_github
