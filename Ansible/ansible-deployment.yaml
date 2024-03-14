@@ -60,4 +60,4 @@
         name: weather-app
         state: started
         image: bensh99/weatherapp:latest
-        published_ports: "8000"
+        published_ports: "8000:8000"
