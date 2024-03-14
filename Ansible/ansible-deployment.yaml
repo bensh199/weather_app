@@ -1,6 +1,6 @@
 ---
 - name: install docker
-  hosts: deployment
+  hosts: ansible1
   become: true
 
   tasks:

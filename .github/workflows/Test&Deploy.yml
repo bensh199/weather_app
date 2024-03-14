@@ -44,8 +44,8 @@ jobs:
       - name: save ansible to cache
         uses: actions/upload-artifact@v4
         with:
-          name: ansible-deployment.yaml
-          path: /home/runner/work/weather_app/weather_app/Ansible/*
+          name: ansible-deployment
+          path: /home/runner/work/weather_app/weather_app/Ansible/
 
       - name: push image
         run: docker push bensh99/weatherapp:latest
@@ -70,7 +70,29 @@ jobs:
   #         source: /home/runner/work/weather_app/weather_app/compose/*
   #         target: /home/ubuntu/
 
-  get_deployment_servers:
+  # get_deployment_servers:
+  #   runs-on: ubuntu-latest
+
+  #   needs: [build]
+
+  #   steps:
+  #     - name: install-and-configure-aws-cli
+  #       uses: unfor19/install-aws-cli-action@v1
+  #       with:
+  #         version: 2
+  #         verbose: false
+  #         arch: amd64
+  #     - run: |
+  #         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws configure set default.region ${{ secrets.AWS_REGION }}
+
+  #     - name: get deployment servers
+  #       run: |
+  #         echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
+  #         echo ${{ env.Deployment_Servers }}
+
+  deploy:
     runs-on: ubuntu-latest
 
     needs: [build]
@@ -92,26 +114,33 @@ jobs:
           echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
           echo ${{ env.Deployment_Servers }}
 
-  deploy:
-    runs-on: ubuntu-latest
 
-    needs: [get_deployment_servers]
-
-    steps:
-      - name: download ansible file
+      - name: download ansible artifact
         uses: actions/download-artifact@v4
         with:
-          name: ansible-deployment.yaml
+          name: ansible-deployment
 
-      - name: run ansible deployment
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          playbook: ansible-deployment.yaml
-          directory: ./
-          key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-          inventory: |
-            [deployment]
-            51.16.41.220
+      - name: Output SSH key to file
+        run: |
+          mkdir ~/.ssh
+          echo "${{secrets.DEPLOYMENT_SSH_KEY}}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Deploy via ansible
+        working-directory: ./Ansible
+        run: |
+          echo "ansible1 ansible_host=51.16.41.220 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa" > hosts_github
+          ansible-playbook web_deploy.yml -i hosts_github
+
+      # - name: run ansible deployment
+      #   uses: dawidd6/action-ansible-playbook@v2
+      #   with:
+      #     playbook: ansible-deployment.yaml
+      #     directory: ./
+      #     key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+      #     inventory: |
+      #       [deployment]
+      #       51.16.41.220
 
 
 #   ---------------------------------------------------------------------------------------------------------------------------
