@@ -26,7 +26,6 @@ jobs:
         working-directory: /home/runner/work/weather_app/weather_app/Python-Project
         run: |
           docker build -t bensh99/weatherapp:latest .
-          docker save -o weatherapp.tar bensh99/weatherapp:latest
 
       - name: test image
         working-directory: /home/runner/work/weather_app/weather_app/Python-Project
@@ -34,12 +33,6 @@ jobs:
           docker run -p 8000:8000 --rm --name weather_app -d bensh99/weatherapp:latest
           python3 test.py
           docker kill weather_app
-
-      # - name: save comopose to cache
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: compose.yaml
-      #     path: /home/runner/work/weather_app/weather_app/Python-Project/compose/*
 
       - name: save ansible to cache
         uses: actions/upload-artifact@v4
@@ -49,48 +42,6 @@ jobs:
 
       - name: push image
         run: docker push bensh99/weatherapp:latest
-
-  # distribute_artifacts:
-  #   runs-on: ubuntu-latest
-
-  #   needs: [build]
-
-  #   steps:
-  #     - name: download compose
-  #       uses: actions/download-artifact@v4
-
-  #     - name: scp compose
-  #       uses: appleboy/scp-action@v0.1.7
-  #       with:
-  #         host: 51.17.112.149
-  #         username: ubuntu
-  #         port: ${{ secrets.SSH_PORT }}
-  #         key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-  #         overwrite: true
-  #         source: /home/runner/work/weather_app/weather_app/compose/*
-  #         target: /home/ubuntu/
-
-  # get_deployment_servers:
-  #   runs-on: ubuntu-latest
-
-  #   needs: [build]
-
-  #   steps:
-  #     - name: install-and-configure-aws-cli
-  #       uses: unfor19/install-aws-cli-action@v1
-  #       with:
-  #         version: 2
-  #         verbose: false
-  #         arch: amd64
-  #     - run: |
-  #         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws configure set default.region ${{ secrets.AWS_REGION }}
-
-  #     - name: get deployment servers
-  #       run: |
-  #         echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
-  #         echo ${{ env.Deployment_Servers }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -112,8 +63,6 @@ jobs:
       - name: get deployment servers
         run: |
           echo "Deployment_Servers=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Production server" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)" >> $GITHUB_ENV
-          echo ${{ env.Deployment_Servers }}
-
 
       - name: download ansible artifact
         uses: actions/download-artifact@v4
@@ -131,44 +80,3 @@ jobs:
           export ANSIBLE_HOST_KEY_CHECKING=False
           echo "ansible1 ansible_host=51.16.41.220 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa" > hosts_github
           ansible-playbook ansible-deployment.yaml -i hosts_github
-
-      # - name: run ansible deployment
-      #   uses: dawidd6/action-ansible-playbook@v2
-      #   with:
-      #     playbook: ansible-deployment.yaml
-      #     directory: ./
-      #     key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-      #     inventory: |
-      #       [deployment]
-      #       51.16.41.220
-
-
-#   ---------------------------------------------------------------------------------------------------------------------------
-
-#   deploy:
-#     name: deploy weatherapp on instances
-#     runs-on: ubuntu-latest
-
-#     needs: [distribute_artifacts]
-
-#     steps:
-#       - name: ssh into EC2
-#         uses: appleboy/ssh-action@v1.0.3
-#         with:
-#           host: 51.17.112.149
-#           username: ubuntu
-#           key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
-#           port: ${{ secrets.SSH_PORT }}
-#           script_stop: false
-#           script: |
-#             docker compose -f /home/ubuntu/github/workspace/compose/compose.yaml up -d
-
-# ---------------------------------------------------------------------------------------------------------------------------
-
-# repo_url="https://github.com/bensh199/weather_app.git" local_path="./weather_app" && [ -d "$local_path" ] || git clone "$repo_url" "$local_path"
-#
-# echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > private_key && chmod 600 private_key
-# ssh -o StrictHostKeyChecking=no -i private_key ubuntu@51.16.46.0
-# git clone https://github.com/bensh199/weather_app.git
-# cd ~/weather_app/compose
-# docker compose up
