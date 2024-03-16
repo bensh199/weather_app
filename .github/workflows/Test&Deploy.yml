@@ -41,16 +41,16 @@ jobs:
           python3 test.py
           docker kill weather_app
 
-      - name: Scan Docker image 🐳
+      - name: Scan Docker image
         uses: snyk/actions/docker@master
         continue-on-error: true
         with:
           image: bensh99/weatherapp:latest
-          args: --file=/home/runner/work/weather_app/weather_app/Python-Project/Dockerfile --severity-threshold=critical --sarif-file-output=snyk.sarif
+          args: --file=./weather_app/Python-Project/Dockerfile --severity-threshold=critical --sarif-file-output=snyk.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Upload Snyk report as sarif 📦
+      - name: Upload Snyk report as sarif
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk.sarif
