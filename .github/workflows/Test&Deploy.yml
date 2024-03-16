@@ -25,6 +25,7 @@ jobs:
       - name: build image
         working-directory: /home/runner/work/weather_app/weather_app/Python-Project
         run: |
+          exit 1
           docker build -t bensh99/weatherapp:latest .
 
       - name: test image
