@@ -22,7 +22,8 @@ jobs:
   build:
     permissions:
       contents: read
-      packages: read
+      security-events: write
+      actions: read
     runs-on: ubuntu-latest
 
     steps:
