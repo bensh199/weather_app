@@ -1,10 +1,15 @@
 name: weather-app-deployment
 
 on:
-  workflow_run:
-    workflows: [CodeQL]
-    types:
-      - completed
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  
+  # workflow_run:
+  #   workflows: [CodeQL]
+  #   types:
+  #     - completed
 
 jobs:
   on-failure:
