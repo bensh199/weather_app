@@ -1,12 +1,19 @@
 name: weather-app-deployment
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  workflow_run:
+    workflows: [CodeQL]
+    types:
+      - completed
 
 jobs:
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: |
+          exit 1
+
   build:
     runs-on: ubuntu-latest
 
@@ -25,7 +32,6 @@ jobs:
       - name: build image
         working-directory: /home/runner/work/weather_app/weather_app/Python-Project
         run: |
-          exit 1
           docker build -t bensh99/weatherapp:latest .
 
       - name: test image
