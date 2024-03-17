@@ -49,7 +49,7 @@ jobs:
         continue-on-error: true
         with:
           image: bensh99/weatherapp:latest
-          args: --severity-threshold=critical --sarif-file-output=snyk.sarif
+          args: --severity-threshold=low --sarif-file-output=snyk.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
